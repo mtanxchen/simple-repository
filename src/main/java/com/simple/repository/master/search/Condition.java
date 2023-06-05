@@ -128,7 +128,7 @@ public class Condition {
             whereSql += " 1 = 1";
             return this;
         }
-        whereSql += " " + fieldName + " like \"%" + value + "%\"";
+        whereSql += " " + fieldName + " like \'%" + value + "%\'";
         return this;
     }
 
@@ -144,7 +144,7 @@ public class Condition {
             return this;
         }
         String sql = " %s in (%s)";
-        String str = "";
+        String str;
         if (values.get(0).getClass().equals(String.class) || values.get(0).getClass().equals(Date.class)) {
             str = values.stream().map(o -> "'" + o.toString() + "'").collect(Collectors.joining(","));
         } else {

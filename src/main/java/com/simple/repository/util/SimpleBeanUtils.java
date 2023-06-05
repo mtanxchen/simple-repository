@@ -72,7 +72,7 @@ public class SimpleBeanUtils {
      * @param sources 来源
      * @param tClass  目标类型
      */
-    public static <E> List<E> copyListObject(List<Object> sources, Class<E> tClass) {
+    public static <E> List<E> copyListObject(List<?> sources, Class<E> tClass) {
         if (null == sources || null == tClass || sources.isEmpty()) {
             return null;
         }

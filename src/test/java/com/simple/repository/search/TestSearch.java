@@ -10,6 +10,8 @@ public class TestSearch  extends BaseSearch {
 
     public String name;
 
+    public Integer age;
+
     public void like(String fileName){
         fileName = "%"+fileName+"%";
     }

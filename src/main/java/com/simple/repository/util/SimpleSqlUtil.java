@@ -32,6 +32,19 @@ public class SimpleSqlUtil {
                 sql = SimpleStringUtils.replaceAll(sql, paramMap.get(field), replaceText);
             }
         }
+        // sql特殊处理
+        sql = sqlSetActionHandler(sql);
+        return sql;
+    }
+
+    /**
+     * set语句处理
+     * @param sql
+     */
+    private static String sqlSetActionHandler(String sql) {
+        sql = SimpleStringUtils.replaceAll(sql, "  ", " ");
+        sql = SimpleStringUtils.replaceAll(sql, ", 1 = 1", "");
+        sql = SimpleStringUtils.replaceAll(sql, "set 1 = 1 ,", "");
         return sql;
     }
 
@@ -120,7 +133,6 @@ public class SimpleSqlUtil {
         return value.toString();
     }
 
-    private static final List<String> tags = Arrays.asList(" where ", " on ", " and ", " or ", "(", " having ");
-
+    private static final List<String> tags = Arrays.asList(" set ", " where ", " on ", " and ", " or ", "(", " having ", ",");
 
 }

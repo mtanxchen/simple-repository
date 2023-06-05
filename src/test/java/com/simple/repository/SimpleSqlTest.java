@@ -2,7 +2,6 @@ package com.simple.repository;
 
 import com.simple.repository.connect.RedisSession;
 import com.simple.repository.connect.SimpleDataSource;
-import com.simple.repository.master.Entity;
 import com.simple.repository.master.search.BaseSearch;
 import com.simple.repository.master.search.Condition;
 import com.simple.repository.search.TestSearch;
@@ -10,6 +9,7 @@ import com.simple.repository.test.TestRepository;
 import com.simple.repository.test.entity.TestEntity;
 import com.simple.repository.test.index.TestIndex;
 import com.simple.repository.util.SimpleCollectionUtil;
+import com.simple.repository.util.SimpleJson;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +24,8 @@ import java.util.*;
  * @date 2023-05-24
  */
 public class SimpleSqlTest {
-
     private final static Logger log = LoggerFactory.getLogger(SimpleDataSource.class);
 
-    //
     @Test
     public void testIndexQuery() throws IOException {
         SimpleStart.run(new String[]{"--simple.env=dev"});
@@ -44,6 +42,7 @@ public class SimpleSqlTest {
         entity.name = "张三";
         entity.age = 18;
         new TestRepository().add(entity);
+        log.info("Sql操作测试类:新增商品entity={}", SimpleJson.toJsonString(entity));
     }
 
     @Test
@@ -133,11 +132,72 @@ public class SimpleSqlTest {
         SimpleStart.run(new String[]{"--simple.env=dev"});
         TestSearch testSearch = new TestSearch();
         testSearch.name = "张";
+        testSearch.age = 11;
         List<TestEntity> entities = new TestRepository().select(TestIndex.TEST_SELECT, testSearch, TestEntity.class);
-
         Map<String, Object> map = new HashMap<>();
         map.put("name", "张%");
         new TestRepository().select(TestIndex.TEST_SELECT, map, TestEntity.class);
+    }
+
+    @Test
+    public void requiredSqlTest() throws IOException {
+        /* BaseSearch非空校验 */
+        SimpleStart.run(new String[]{"--simple.env=dev"});
+        TestSearch testSearch = new TestSearch();
+        testSearch.name = "张";
+        try {
+            new TestRepository().select(TestIndex.TEST_SELECT, testSearch, TestEntity.class);
+        } catch (Exception e) {
+            log.info("Sql操作测试类:查询非空校验;testSearch={}", SimpleJson.toJsonString(testSearch), e);
+        }
+        /* map查询非空校验 */
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "张%");
+        try {
+            new TestRepository().select(TestIndex.TEST_SELECT, map, TestEntity.class);
+        } catch (Exception e) {
+            log.info("Sql操作测试类:查询非空校验;map={}", SimpleJson.toJsonString(map), e);
+        }
+
+        /* 更新执行非空校验 */
+        TestEntity entity = new TestEntity();
+        entity.id = 10;
+        entity.name = "王五";
+        try {
+            new TestRepository().execute(TestIndex.UPDATE_TEST, entity);
+        } catch (Exception e) {
+            log.info("Sql操作测试类:更新执行非空校验;entity={}", SimpleJson.toJsonString(entity), e);
+        }
+        // map测试
+        map = new HashMap<>();
+        map.put("id", 11);
+        try {
+            new TestRepository().execute(TestIndex.UPDATE_TEST, map);
+        } catch (Exception e) {
+            log.info("Sql操作测试类:更新执行非空校验;map={}", SimpleJson.toJsonString(map), e);
+        }
+
+    }
+
+    @Test
+    public void updateTest() throws IOException {
+        SimpleStart.run(new String[]{"--simple.env=dev"});
+        TestEntity entity = new TestEntity();
+        entity.id = 10;
+        entity.name = "张";
+        new TestRepository().update(entity);
+    }
+
+    @Test
+    public void updateList() throws IOException {
+        SimpleStart.run(new String[]{"--simple.env=dev"});
+        TestEntity entity = new TestEntity();
+        entity.id = 10;
+        entity.name = "张";
+        TestEntity entity2 = new TestEntity();
+        entity2.id = 11;
+        entity2.name = "张";
+        new TestRepository().update(Arrays.asList(entity2, entity));
     }
 
     @Test
@@ -195,9 +255,6 @@ public class SimpleSqlTest {
         objMap.put("name", "李四");
         ListObjMap.add(objMap);
         List<TestEntity> testEntities = SimpleCollectionUtil.listMapToObject(ListObjMap, TestEntity.class);
-
-
-
     }
 
 }

@@ -367,6 +367,9 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
      */
     @Override
     public <E extends Entity<?>> Integer execute(String sqlIndex, E params) {
+        if (SimpleStringUtils.isEmpty(sqlIndex)) {
+            throw new SimpleException("sqlIndex不能为空");
+        }
         String sql = createIndexSql(sqlIndex, params);
         int i = SimpleSession.openSession().update(sql);
         if (i > 0) {
@@ -592,16 +595,14 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
      * @return 返回sql语句
      */
     private String createIndexSql(String sqlIndex, Object params) {
-        if (SimpleStringUtils.isEmpty(sqlIndex)) {
-            return null;
-        }
         String sql = SqlIndexCache.getCacheSql(sqlIndex).toLowerCase();
         // 如果sql模板中没有sql语句则报错
         if (SimpleStringUtils.isEmpty(sql)) {
             throw new SimpleException(SimpleException.Type.SQL_IS_NULL);
         }
-        // 合并sql的值
+        /* 合并sql的值 */
         Map<String, String> map = analysisPojo(params, null, false);
+        checkRequiredFiled(sqlIndex, map);
         sql = SimpleSqlUtil.sqlRevise(sql, map);
         for (String field : map.keySet()) {
             String numName = "\\$\\{" + field + "}";
@@ -621,6 +622,13 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
      */
     private String createIndexSql(String sqlIndex, Map<String, ?> map) {
         String sql = SqlIndexCache.getCacheSql(sqlIndex).toLowerCase();
+        // 如果sql模板中没有sql语句则报错
+        if (SimpleStringUtils.isEmpty(sql)) {
+            throw new SimpleException(SimpleException.Type.SQL_IS_NULL);
+        }
+        // 非空检查
+        checkRequiredFiled(sqlIndex, map);
+        // 合并sql
         sql = SimpleSqlUtil.sqlRevise(sql, map);
         for (String field : map.keySet()) {
             String numName = "\\$\\{" + field + "}";
@@ -629,6 +637,21 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
             sql = sql.replaceAll(numName, SimpleSqlUtil.formatValue(map.get(field)));
         }
         return sql;
+    }
+
+    /**
+     * 非空检查
+     *
+     * @param sqlIndex sql索引
+     * @param map      传值列表
+     */
+    private void checkRequiredFiled(String sqlIndex, Map<String, ?> map) {
+        List<String> requiredFiledList = SqlIndexCache.getRequiredFiled(sqlIndex);
+        for (String requiredFiled : requiredFiledList) {
+            if (null == map.get(requiredFiled)) {
+                throw new SimpleException(requiredFiled + "传参不能为空");
+            }
+        }
     }
 
 
