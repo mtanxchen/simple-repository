@@ -1,7 +1,7 @@
 # Simple-Repository
 Simple-Repository是一款简易的数据存储管理框架，提供便捷的缓存管理、数据库连接与数据持久化、代码生成等功能。
 
-#### <a href="http://gpl.edlian.com/book/master/index.html">点击跳转Simple-Repository文档</a>
+#### <a href="http://gpl.edlian.com/book/master/index.html" target="_blank" >点击跳转Simple-Repository文档</a>
 
 # 为什么要设计Simple-Repository
 ### 1. SQL从业务代码中完全解耦
