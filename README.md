@@ -1,6 +1,8 @@
 # Simple-Repository
 Simple-Repository是一款简易的数据存储管理框架，提供便捷的缓存管理、数据库连接与数据持久化、代码生成等功能。
 
+#### <a href="http://gpl.edlian.com/book/master/index.html">点击跳转Simple-Repository文档</a>
+
 # 为什么要设计Simple-Repository
 ### 1. SQL从业务代码中完全解耦
 日常工作中使用过Spring JPA、Hibernate、Mybatis、JOOQ等主流的ORM框架。但这些框架要么过于厚重配置繁琐，要么会将sql语句交织在业务代码中，
