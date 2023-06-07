@@ -30,7 +30,7 @@ Simple-Repository并不仅仅是ORM框架而是数据仓库，未来将会加入
 <dependency>
     <groupId>simple-repository</groupId>
     <artifactId>repository</artifactId>
-    <version>1.1.0</version>
+    <version>1.0.1</version>
 </dependency>
 
 ~~~
