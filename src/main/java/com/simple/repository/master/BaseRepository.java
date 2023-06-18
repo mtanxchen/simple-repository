@@ -605,10 +605,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         checkRequiredFiled(sqlIndex, map);
         sql = SimpleSqlUtil.sqlRevise(sql, map);
         for (String field : map.keySet()) {
-            String numName = "\\$\\{" + field + "}";
-            String strName = "&\\{" + field + "}";
-            sql = sql.replaceAll(strName, map.get(field));
-            sql = sql.replaceAll(numName, map.get(field));
+            sql = replaceIndexSql(sql, field, map.get(field));
         }
         return sql;
     }
@@ -631,10 +628,27 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         // 合并sql
         sql = SimpleSqlUtil.sqlRevise(sql, map);
         for (String field : map.keySet()) {
-            String numName = "\\$\\{" + field + "}";
-            String strName = "&\\{" + field + "}";
-            sql = sql.replaceAll(strName, SimpleSqlUtil.formatValue(map.get(field)));
-            sql = sql.replaceAll(numName, SimpleSqlUtil.formatValue(map.get(field)));
+            sql = replaceIndexSql(sql, field, map.get(field));
+        }
+        return sql;
+    }
+
+    /**
+     * 替换sql索引语句的值
+     *
+     * @param sql   sql语句
+     * @param field 字段名
+     * @param value 字段值
+     * @return 返回替换后的sql
+     */
+    private static String replaceIndexSql(String sql, String field, Object value) {
+        String numName = "\\$\\{" + field + "}";
+        String strName = "&\\{" + field + "}";
+        sql = sql.replaceAll(strName, SimpleSqlUtil.formatValue(value));
+        if (value instanceof String) {
+            sql = sql.replaceAll(numName, value.toString());
+        } else {
+            sql = sql.replaceAll(numName, SimpleSqlUtil.formatValue(value));
         }
         return sql;
     }
