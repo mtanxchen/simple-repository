@@ -10,4 +10,4 @@ update test set name = &{name} , age = ${age} where id = ${id};
  * @name testSelect
  * @required age,name
  */
-select * from test where name like &{name} and age > ${age};
+select * from test where name like &{name} and age > ${age} and id in (${ids});

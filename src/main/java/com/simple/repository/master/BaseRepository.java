@@ -89,7 +89,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         }
         // 分析对象生成组合sql的字段和字段值
         String sql = "insert into %s (%s) values (%s)";
-        Map<String, String> analysisMap = analysisPojo(entity, null, false);
+        Map<String, String> analysisMap = analysisPojoAndFormatValue(entity, null, false);
         String fields = String.join(",", analysisMap.keySet());
         String values = String.join(",", analysisMap.values());
         sql = String.format(sql, getTableName(), fields, values);
@@ -548,7 +548,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         String sql = "update %s set %s where %s";
         // 分析对象生成组合sql的字段和字段值
         String table = getTableName();
-        Map<String, String> analysisMap = analysisPojo(entity, Collections.singletonList("id"), updateNull);
+        Map<String, String> analysisMap = analysisPojoAndFormatValue(entity, Collections.singletonList("id"), updateNull);
         StringBuilder stringBuilder = new StringBuilder();
         for (String filed : analysisMap.keySet()) {
             stringBuilder.append(filed).append("=").append(analysisMap.get(filed)).append(",");
@@ -601,7 +601,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
             throw new SimpleException(SimpleException.Type.SQL_IS_NULL);
         }
         /* 合并sql的值 */
-        Map<String, String> map = analysisPojo(params, null, false);
+        Map<String, Object> map = analysisPojo(params, null, false);
         checkRequiredFiled(sqlIndex, map);
         sql = SimpleSqlUtil.sqlRevise(sql, map);
         for (String field : map.keySet()) {
@@ -670,7 +670,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
 
 
     /**
-     * 解析对象的属性与值
+     * 解析对象的属性与值(值格式化)
      * <p>
      * 1.属性格式：属性名由驼峰转下划线；
      * 2.解析的属性与值由nullAnalysis控制，
@@ -682,7 +682,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
      * @param nullAnalysis 是否空值解析
      * @return 返回解析后属性名与属性值，map由fields与value组成
      */
-    private Map<String, String> analysisPojo(Object entity, List<String> filterFields, boolean nullAnalysis) {
+    private Map<String, String> analysisPojoAndFormatValue(Object entity, List<String> filterFields, boolean nullAnalysis) {
         Map<String, String> map = new HashMap<>();
         Map<String, Field> fieldMap = SimpleBeanUtils.getFields(entity);
         for (String fieldName : fieldMap.keySet()) {
@@ -701,6 +701,37 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         return map;
     }
 
+    /**
+     * 解析对象的属性与值
+     * <p>
+     * 1.属性格式：属性名由驼峰转下划线；
+     * 2.解析的属性与值由nullAnalysis控制，
+     * nullAnalysis为true,解析结果包含空值
+     * nullAnalysis为falst,解析结果不包含空值
+     * </p>
+     *
+     * @param entity       查询对象
+     * @param nullAnalysis 是否空值解析
+     * @return 返回解析后属性名与属性值，map由fields与value组成
+     */
+    private Map<String, Object> analysisPojo(Object entity, List<String> filterFields, boolean nullAnalysis) {
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Field> fieldMap = SimpleBeanUtils.getFields(entity);
+        for (String fieldName : fieldMap.keySet()) {
+            Field field = fieldMap.get(fieldName);
+            String name = SimpleStringUtils.humpToUnderline(fieldName);
+            try {
+                Object value = field.get(entity);
+                if (null != filterFields && filterFields.contains(name) || !nullAnalysis && null == value) {
+                    continue;
+                }
+                map.put(name, value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return map;
+    }
 
     /**
      * 解析对象的属性与值
@@ -818,7 +849,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
      */
     private String createUpdateSql(T entity, boolean updateNull) {
         // 分析对象生成组合sql的字段和字段值
-        Map<String, String> analysisMap = analysisPojo(entity, Collections.singletonList("id"), updateNull);
+        Map<String, String> analysisMap = analysisPojoAndFormatValue(entity, Collections.singletonList("id"), updateNull);
         StringBuilder content = new StringBuilder();
         int i = 0;
         for (String field : analysisMap.keySet()) {
