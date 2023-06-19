@@ -133,10 +133,17 @@ public class SimpleSqlTest {
         TestSearch testSearch = new TestSearch();
         testSearch.name = "张";
         testSearch.age = 11;
+        testSearch.ids = Arrays.asList(1, 2, 3);
         List<TestEntity> entities = new TestRepository().select(TestIndex.TEST_SELECT, testSearch, TestEntity.class);
+        // map查询测试
         Map<String, Object> map = new HashMap<>();
         map.put("name", "张%");
-        new TestRepository().select(TestIndex.TEST_SELECT, map, TestEntity.class);
+        map.put("age", 11);
+        map.put("ids", Arrays.asList(1, 2, 3));
+        entities = new TestRepository().select(TestIndex.TEST_SELECT, map, TestEntity.class);
+        // 非空测试
+        map.put("age", null);
+        entities = new TestRepository().select(TestIndex.TEST_SELECT, map, TestEntity.class);
     }
 
     @Test

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class TestSearch  extends BaseSearch {
 
-    public List<String> ids;
+    public List<Integer> ids;
 
     public String name;
 
