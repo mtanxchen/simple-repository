@@ -297,7 +297,7 @@ public class Condition {
             return value;
         }
         if (value instanceof String) {
-            value = value.toString().replaceAll("'", "\\'");
+            value = SimpleStringUtils.replaceAll(value.toString(),"'","\\'");
             return "'" + value + "'";
         } else if (value instanceof Date) {
             return "'" + SimpleDateUtils.dateToStr((Date) value, SimpleDateUtils.FormatType.DATE_FORMAT) + "'";

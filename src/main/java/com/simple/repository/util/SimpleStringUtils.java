@@ -69,12 +69,21 @@ public class SimpleStringUtils {
         if (isEmpty(text)) {
             return text;
         }
-        String oldText = text;
-        text = text.replace(target, replace);
-        if (!text.equals(oldText)) {
-            text = replaceAll(text, target, replace);
+        boolean pass = true;
+        StringBuilder newText = new StringBuilder();
+        while (pass) {
+            int index = text.indexOf(target);
+            if (index < 0) {
+                newText.append(text);
+                pass = false;
+                continue;
+            }
+            int splitIndex = index + target.length();
+            String str = text.substring(0, splitIndex);
+            text = text.substring(splitIndex);
+            newText.append(str.replace(target, replace));
         }
-        return text;
+        return newText.toString();
     }
 
     /**

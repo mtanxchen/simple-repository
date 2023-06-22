@@ -642,13 +642,13 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
      * @return 返回替换后的sql
      */
     private static String replaceIndexSql(String sql, String field, Object value) {
-        String numName = "\\$\\{" + field + "}";
-        String strName = "&\\{" + field + "}";
-        sql = sql.replaceAll(strName, SimpleSqlUtil.formatValue(value));
+        String numName = "${" + field + "}";
+        String strName = "&{" + field + "}";
+        sql = SimpleStringUtils.replaceAll(sql, strName, SimpleSqlUtil.formatValue(value));
         if (value instanceof String) {
-            sql = sql.replaceAll(numName, value.toString());
+            sql = SimpleStringUtils.replaceAll(sql, numName, value.toString());
         } else {
-            sql = sql.replaceAll(numName, SimpleSqlUtil.formatValue(value));
+            sql = SimpleStringUtils.replaceAll(sql, numName, SimpleSqlUtil.formatValue(value));
         }
         return sql;
     }

@@ -139,12 +139,13 @@ public class SimpleSqlTest {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "张%");
         map.put("age", 11);
-        map.put("ids", Arrays.asList(1, 2, 3));
+        map.put("ids", Arrays.asList("1", "'2", "3"));
         entities = new TestRepository().select(TestIndex.TEST_SELECT, map, TestEntity.class);
         // 非空测试
         map.put("age", null);
         entities = new TestRepository().select(TestIndex.TEST_SELECT, map, TestEntity.class);
     }
+
 
     @Test
     public void requiredSqlTest() throws IOException {
