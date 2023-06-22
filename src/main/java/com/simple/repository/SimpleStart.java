@@ -2,12 +2,9 @@ package com.simple.repository;
 
 import com.simple.repository.config.SimpleConfig;
 import com.simple.repository.connect.SimpleSession;
-import com.simple.repository.generate.SimpleGenerate;
-import com.simple.repository.generate.SimpleSqlConstGenerate;
 import com.simple.repository.master.SqlIndexCache;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * simple启动服务

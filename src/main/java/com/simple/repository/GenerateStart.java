@@ -5,7 +5,6 @@ import com.simple.repository.generate.SimpleGenerate;
 import com.simple.repository.generate.SimpleSqlConstGenerate;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 /**
  * 代码启动生成

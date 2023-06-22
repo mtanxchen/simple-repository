@@ -1,12 +1,8 @@
 package com.simple.repository.connect;
 
 import com.simple.repository.config.SimpleConfig;
-import com.simple.repository.util.SimpleDateUtils;
 import com.simple.repository.util.SimpleStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;

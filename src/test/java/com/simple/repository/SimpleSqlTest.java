@@ -231,8 +231,6 @@ public class SimpleSqlTest {
 
         new TestRepository().delAllCache();
         RedisSession.set("simple:test", "hello world", 1000L);
-        RedisSession.open();
-
 
         TestEntity entity = new TestEntity();
         entity.name = "张三";

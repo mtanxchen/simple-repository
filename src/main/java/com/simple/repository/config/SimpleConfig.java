@@ -5,11 +5,8 @@ import com.simple.repository.master.exception.SimpleException;
 import com.simple.repository.util.SimpleStringUtils;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -40,6 +37,11 @@ public class SimpleConfig {
      * 是否spring环境
      */
     public boolean springEnv = false;
+
+    /**
+     * 是否私有属性
+     */
+    public boolean privateProperty = false;
 
     /**
      * 是否输出日志
@@ -179,6 +181,9 @@ public class SimpleConfig {
             switch (key) {
                 case "spring":
                     springEnv = (boolean) obj;
+                    break;
+                case "private-property":
+                    privateProperty = (boolean) obj;
                     break;
                 case "package":
                     packageName = obj.toString();

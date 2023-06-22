@@ -5,8 +5,6 @@ import com.simple.repository.master.Entity;
 import com.simple.repository.util.SimpleJson;
 import com.simple.repository.util.SimpleStringUtils;
 
-import java.io.IOException;
-
 /**
  * 缓存管理
  * <p>
@@ -17,9 +15,6 @@ import java.io.IOException;
  * @date 2023-01-16
  */
 public class SimpleRedisCacheManager<T extends Entity> implements SimpleCacheManager<T> {
-    public SimpleRedisCacheManager() throws IOException {
-        RedisSession.open();
-    }
 
     /**
      * 保存

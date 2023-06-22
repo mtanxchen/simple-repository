@@ -57,6 +57,7 @@ simple:
   sql-index-package: com.simple.repository.test.index
   generate: # 代码生成配置
     spring: false  # 是否开启spring
+    private-property: false # 私有属性：默认为false,false生成public属性，true为private属性
     goods:
       schema: simple
       package: com.simple.repository.test.entity

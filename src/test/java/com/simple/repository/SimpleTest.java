@@ -41,11 +41,26 @@ public class SimpleTest {
     }
 
     /**
+     * redis连接池测试
+     */
+    @Test
+    public void redisPoolTest(){
+        String key = "test:1231";
+        for(int i = 0;i<10;i++){
+            RedisSession.set(key, "1232", 10);
+            try {
+                Thread.sleep(8000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    /**
      * redis 测试
      */
     @Test
     public void redisTest() throws IOException {
-        RedisSession.open();
         String key = "test:1231";
         RedisSession.set(key, "1232", 10);
         System.out.println("setValue:" + RedisSession.list(key, "1231"));
@@ -55,7 +70,6 @@ public class SimpleTest {
         System.out.println("setNx:" + RedisSession.setNx(key, "666", 10));
         System.out.println("setNx2:" + RedisSession.setNx(key + "122", "666", 10));
         RedisSession.remove(key);
-
 
         String hsetKey = "test:haseKey";
         RedisSession.setHash(hsetKey, "name", "张三");
