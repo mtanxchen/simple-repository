@@ -39,6 +39,7 @@ public class SimpleSqlUtil {
 
     /**
      * set语句处理
+     *
      * @param sql
      */
     private static String sqlSetActionHandler(String sql) {
@@ -113,22 +114,20 @@ public class SimpleSqlUtil {
             return "null";
         }
         if (value instanceof String) {
-            value = value.toString().replaceAll("'", "\\'");
+            value = SimpleStringUtils.replaceAll(value.toString(), "'", "\\'");
             return "'" + value + "'";
         } else if (value instanceof Date) {
             return "'" + SimpleDateUtils.dateToStr((Date) value, SimpleDateUtils.FormatType.DATE_FORMAT) + "'";
         } else if (value instanceof Collection) {
-            value = ((Collection<?>) value).stream().map(
-                    o -> {
-                        if (o instanceof String) {
-                            return "'" + o + "'";
-                        } else if (o instanceof Date) {
-                            return "'" + SimpleDateUtils.dateToStr((Date) o, SimpleDateUtils.FormatType.DATE_FORMAT) + "'";
-                        } else {
-                            return o.toString();
-                        }
-                    }
-            ).collect(Collectors.joining(","));
+            List<String> list = new ArrayList<>();
+            for (Object o : (Collection<?>) value) {
+                String str = formatValue(o);
+                if(SimpleStringUtils.isNotEmpty(str)){
+                    list.add(str);
+                }
+            }
+            value = String.join(",", list);
+            value = "(" + value + ")";
         }
         return value.toString();
     }
