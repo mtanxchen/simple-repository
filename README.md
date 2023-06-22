@@ -28,8 +28,8 @@ Simple-Repository并不仅仅是ORM框架而是数据仓库，未来将会加入
 ~~~
 
 <dependency>
-    <groupId>simple-repository</groupId>
-    <artifactId>repository</artifactId>
+    <groupId>com.simple-repository</groupId>
+    <artifactId>simple-data</artifactId>
     <version>1.0.1</version>
 </dependency>
 
