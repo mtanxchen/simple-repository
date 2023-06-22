@@ -3,7 +3,6 @@ package com.simple.repository.master.search;
 import com.simple.repository.util.SimpleDateUtils;
 import com.simple.repository.util.SimpleStringUtils;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -672,10 +672,8 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
     /**
      * 解析对象的属性与值(值格式化)
      * <p>
-     * 1.属性格式：属性名由驼峰转下划线；
-     * 2.解析的属性与值由nullAnalysis控制，
-     * nullAnalysis为true,解析结果包含空值
-     * nullAnalysis为falst,解析结果不包含空值
+     * 1.调用analysisPojo解析出待格式化值的属性map
+     * 2.对map值进行格式化
      * </p>
      *
      * @param entity       查询对象
@@ -683,22 +681,13 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
      * @return 返回解析后属性名与属性值，map由fields与value组成
      */
     private Map<String, String> analysisPojoAndFormatValue(Object entity, List<String> filterFields, boolean nullAnalysis) {
-        Map<String, String> map = new HashMap<>();
-        Map<String, Field> fieldMap = SimpleBeanUtils.getFields(entity);
-        for (String fieldName : fieldMap.keySet()) {
-            Field field = fieldMap.get(fieldName);
-            String name = SimpleStringUtils.humpToUnderline(fieldName);
-            try {
-                Object value = field.get(entity);
-                if (null != filterFields && filterFields.contains(name) || !nullAnalysis && null == value) {
-                    continue;
-                }
-                map.put(name, SimpleSqlUtil.formatValue(value));
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
+        Map<String, Object> map = analysisPojo(entity, filterFields, nullAnalysis);
+        Map<String, String> result = new HashMap<>();
+        for (String key : map.keySet()) {
+            Object value = map.get(key);
+            result.put(key, SimpleSqlUtil.formatValue(value));
         }
-        return map;
+        return result;
     }
 
     /**

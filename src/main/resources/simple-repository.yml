@@ -12,12 +12,12 @@ simple:
       username: root
       password: youthyo.com
       driver: com.mysql.cj.jdbc.Driver
-    redis:  # redis配置
+    redis: # redis配置
       enable: false  #是否开启redis缓存
       host: 192.168.10.111
       port: 9379
       password: redis4123
-  test:   #测试环境
+  test: #测试环境
     log: true #是否输出日志
     datasource:
       url: jdbc:mysql://localhost:3306/edl_stock?useUnicode=true&characterEncoding=utf8&useSSL=true
@@ -29,7 +29,7 @@ simple:
       host: 192.168.10.111
       port: 9379
       password: redis4123
-  pre:  #预发环境
+  pre: #预发环境
     log: false #是否输出日志
     datasource:
       url: jdbc:mysql://localhost:3306/edl_stock?useUnicode=true&characterEncoding=utf8&useSSL=true
@@ -41,7 +41,7 @@ simple:
       host: 192.168.10.111
       port: 9379
       password: redis4123
-  pro:  #生产环境
+  pro: #生产环境
     log: false #是否输出日志
     datasource:
       url: jdbc:mysql://localhost:3306/edl_stock?useUnicode=true&characterEncoding=utf8&useSSL=true
@@ -57,6 +57,7 @@ simple:
   sql-index-package: com.simple.repository.test.index
   generate: # 代码生成配置
     spring: true  # 是否开启spring
+    private-property: true # 私有属性,默认为false
     goods:
       schema: edl_stock
       package: com.simple.repository.test.entity

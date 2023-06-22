@@ -99,17 +99,25 @@ public class SimpleGenerate {
                 createImport(typeList) +
                 "public class " + className + " extends Entity<" + idType + "> {\n" +
                 "@params\n" +
-                "@fieldConst" +
                 "    public Class<?> getIdentityClass(){\n" +
                 "        return " + idType + ".class;\n" +
                 "    }\n\n" +
+                "@getAndSet\n" +
+                "@fieldConst" +
                 "}";
         String params = createParams(fields);
-//        String getAndSet = createGetAndSet(fieldMap);
+        String getAndSet = "";
         String fieldConst = createFieldConst(fields);
+        // 如果设置为私有属性则创建private访问符字段并加上get和set
+        if(config.privateProperty){
+            params = params.replaceAll("public","private");
+            getAndSet = createGetAndSet(fields);
+        }
+        // 替换生成的字符
         doc = doc.replaceAll("@params", params);
-//        doc = doc.replaceAll("@getAndSet", getAndSet);
+        doc = doc.replaceAll("@getAndSet", getAndSet);
         doc = doc.replaceAll("@fieldConst", fieldConst);
+        // 输出类文件
         String filePath = SimpleFileUtils.relativeToAbsolutePath(path) + "\\" + className + ".java";
         SimpleFileUtils.createFile(filePath, doc);
     }
