@@ -81,7 +81,7 @@ public class RedisSession {
         sec = sec <= 0 ? DEFAULT_EXPIRES_SEC : sec;
         Jedis jedis = getJedis();
         boolean result = jedis.setnx(key, value) > 0;
-        if (true) {
+        if (result) {
             jedis.expire(key, sec);
         } else {
             checkExpire(jedis, key, sec);
