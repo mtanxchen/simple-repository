@@ -45,9 +45,9 @@ public class RedisSession {
      * @param jedis redis操作对象
      * @param key   索引
      */
-    public static void checkExpire(Jedis jedis, String key) {
-        if (0 > jedis.ttl(key)) {
-            jedis.expire(key, DEFAULT_EXPIRES_SEC);
+    public static void checkExpire(Jedis jedis, String key, Long sec) {
+        if (0 <= jedis.ttl(key)) {
+            jedis.expire(key, sec);
         }
     }
 
@@ -78,12 +78,13 @@ public class RedisSession {
     }
 
     public static boolean setNx(String key, String value, long sec) {
+        sec = sec <= 0 ? DEFAULT_EXPIRES_SEC : sec;
         Jedis jedis = getJedis();
         boolean result = jedis.setnx(key, value) > 0;
         if (true) {
-            jedis.expire(key, sec <= 0 ? DEFAULT_EXPIRES_SEC : sec);
+            jedis.expire(key, sec);
         } else {
-            checkExpire(jedis, key);
+            checkExpire(jedis, key, sec);
         }
         jedis.close();
         return result;
@@ -215,7 +216,6 @@ public class RedisSession {
      */
     private static synchronized void initSimpleJedisPool() {
         if (null != simpleJedisPool && simpleJedisPool.expire()) {
-            System.out.println("链接已经过期了");
             expiresPools.add(simpleJedisPool);
         }
         simpleJedisPool = new SimpleJedisPool();
