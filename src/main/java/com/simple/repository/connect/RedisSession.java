@@ -1,6 +1,7 @@
 package com.simple.repository.connect;
 
 import com.simple.repository.config.SimpleConfig;
+import com.simple.repository.util.SimpleDateUtils;
 import com.simple.repository.util.SimpleStringUtils;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -190,7 +191,7 @@ public class RedisSession {
         /**
          * 过期时间
          */
-        public final Long EXPIRES = 5 * 1000L;//2 * SimpleDateUtils.HOUR_MSEL;
+        public final Long EXPIRES = 2 * SimpleDateUtils.HOUR_MSEL;
 
         public SimpleJedisPool() {
             try {
