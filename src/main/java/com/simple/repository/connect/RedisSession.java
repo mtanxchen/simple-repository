@@ -45,8 +45,8 @@ public class RedisSession {
      * @param jedis redis操作对象
      * @param key   索引
      */
-    public static void checkExpire(Jedis jedis, String key, Long sec) {
-        if (0 <= jedis.ttl(key)) {
+    public static void checkExpire(Jedis jedis, String key, long sec) {
+        if (0 > jedis.ttl(key)) {
             jedis.expire(key, sec);
         }
     }
