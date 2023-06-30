@@ -13,7 +13,7 @@ import java.util.*;
  * 仓储配置
  *
  * @author laiqx
- * @date 2023-02-08
+ * date 2023-02-08
  */
 public class SimpleConfig {
 
@@ -90,10 +90,9 @@ public class SimpleConfig {
 
     /**
      * 初始化配置
-     *
      * @return 返回配置对象
      */
-    public static SimpleConfig initConfig() throws IOException {
+    public static SimpleConfig initConfig(){
         if (null == config) {
             config = new SimpleConfig();
         }

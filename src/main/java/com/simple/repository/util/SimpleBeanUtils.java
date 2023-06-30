@@ -12,15 +12,16 @@ import java.util.Map;
  *
  * @author laiqx
  * @version 1.0.1
- * @date 2022-11-14
+ * date 2022-11-14
  */
 public class SimpleBeanUtils {
 
     /**
      * 对象拷贝
-     *
      * @param source 来源
-     * @param target 目标
+     * @param target 目标对象
+     * @return 返回目标对象
+     * @param <E> 目标对象类型
      */
     public static <E> E copyObject(Object source, E target) {
         if (null == source || null == target) {
@@ -48,9 +49,10 @@ public class SimpleBeanUtils {
 
     /**
      * 对象拷贝
-     *
      * @param source 来源
      * @param tClass 目标类型
+     * @return 返回目标对象
+     * @param <E> 目标对象类型
      */
     public static <E> E copyObject(Object source, Class<E> tClass) {
         if (null == source || null == tClass) {
@@ -65,12 +67,12 @@ public class SimpleBeanUtils {
         }
     }
 
-
     /**
      * 对象列表拷贝
-     *
-     * @param sources 来源
-     * @param tClass  目标类型
+     * @param sources 来源集
+     * @param tClass 目标类型
+     * @return 返回目标对象列表
+     * @param <E> 目标对象类型
      */
     public static <E> List<E> copyListObject(List<?> sources, Class<E> tClass) {
         if (null == sources || null == tClass || sources.isEmpty()) {
@@ -102,7 +104,6 @@ public class SimpleBeanUtils {
      * @param tClass 操作对象的类型
      * @return 返回对象属性MAP
      */
-
     public static Map<String, Field> getFields(Class<?> tClass) {
         Map<String, Field> map = new HashMap<>();
         for (Field field : tClass.getFields()) {

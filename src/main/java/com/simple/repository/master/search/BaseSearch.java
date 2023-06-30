@@ -8,7 +8,7 @@ import java.util.List;
  * 基础查询对象
  *
  * @author laiqx
- * @date 2022-11-12
+ * date 2022-11-12
  */
 public class BaseSearch implements Serializable {
 
@@ -51,9 +51,9 @@ public class BaseSearch implements Serializable {
 
     /**
      * 新增排序规则
-     *
      * @param fieldName 字段
-     * @param type      排序类型
+     * @param type 排序类型
+     * @return 返回当前查询对象
      */
     public BaseSearch putSort(String fieldName, SortType type) {
         sorts.add(new Sort(fieldName, type));

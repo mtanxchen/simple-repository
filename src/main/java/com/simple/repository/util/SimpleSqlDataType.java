@@ -12,7 +12,7 @@ import java.util.Map;
  * 数据库数据类型工具
  *
  * @author laiqx
- * @date 2023-02-06
+ * date 2023-02-06
  */
 public class SimpleSqlDataType {
 

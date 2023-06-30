@@ -48,9 +48,9 @@ public class SqlIndexCache {
     }
 
     /**
-     * 重新加载sql游标
+     * 初始化sql游标
      *
-     * @throws IOException
+     * @throws IOException 读取sql文件异常
      */
     public static void initSqlIndex() throws IOException {
         Map<String, String> sqlContentMap = getFileSqlContent("sql/");

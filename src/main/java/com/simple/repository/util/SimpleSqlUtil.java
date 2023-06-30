@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  *
  * @author laiqx
  * @version 1.0.1
- * @date 2022-11-08
+ * date 2022-11-08
  */
 
 public class SimpleSqlUtil {
@@ -22,6 +22,7 @@ public class SimpleSqlUtil {
      * </p>
      *
      * @param sql sql语句
+     * @param valueMap 值map,key:字段名，value:字段值
      * @return 返回矫正后的sql语句
      */
     public static String sqlRevise(String sql, Map<String, ?> valueMap) {
@@ -40,7 +41,7 @@ public class SimpleSqlUtil {
     /**
      * set语句处理
      *
-     * @param sql
+     * @param sql 待处理的sql语句
      */
     private static String sqlSetActionHandler(String sql) {
         sql = SimpleStringUtils.replaceAll(sql, "  ", " ");
@@ -88,10 +89,10 @@ public class SimpleSqlUtil {
     }
 
     /**
-     * 最大的左sql标签未知
+     * 最大的左sql标签位置
      *
-     * @param leftSql
-     * @return
+     * @param leftSql 截取后左边的sql语句
+     * @return 最大的左sql标签位置
      */
     public static int maxLeftIndex(String leftSql) {
         Integer index = null;

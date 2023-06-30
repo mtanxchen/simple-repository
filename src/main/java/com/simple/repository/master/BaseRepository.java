@@ -20,7 +20,7 @@ import java.util.*;
  *
  * @param <T> 操作对象类型
  * @author laiqx
- * @date 2023-02-08
+ * date 2023-02-08
  */
 public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
 
@@ -59,7 +59,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         try {
             cacheTables = SimpleConfig.initConfig().cacheTable;
             cacheManager = null != SimpleConfig.initConfig().redis && SimpleConfig.initConfig().redis.getEnable() ? new SimpleRedisCacheManager<>() : new SimpleInnerCacheManager<>();
-        } catch (IOException e) {
+        } catch (Exception e) {
             cacheManager = new SimpleInnerCacheManager<>();
         }
     }

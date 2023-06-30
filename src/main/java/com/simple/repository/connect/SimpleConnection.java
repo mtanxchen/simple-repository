@@ -7,7 +7,7 @@ import java.sql.Statement;
 /**
  * 数据库连接
  * @author laiqx
- * @date 2023-05-09
+ * date 2023-05-09
  */
 public class SimpleConnection {
 
@@ -37,7 +37,7 @@ public class SimpleConnection {
     /**
      * 创建Statement
      * @return Statement
-     * @throws SQLException
+     * @throws SQLException 创建Statement异常
      */
     public Statement createStatement() throws SQLException {
         return connection.createStatement();
@@ -45,7 +45,7 @@ public class SimpleConnection {
 
     /**
      * 提交事务
-     * @throws SQLException
+     * @throws SQLException 提交事务失败异常
      */
     public void commit() throws SQLException {
         connection.commit();
@@ -53,7 +53,7 @@ public class SimpleConnection {
 
     /**
      * 回滚
-     * @throws SQLException
+     * @throws SQLException 回滚事务失败异常
      */
     public void rollback() throws SQLException {
         connection.rollback();
@@ -62,7 +62,7 @@ public class SimpleConnection {
 
     /**
      * 判断是否超时
-     * @return
+     * @return 返回是否超时
      */
     public boolean overdue(){
         return System.currentTimeMillis() - timestamp > overdue_times;
@@ -70,7 +70,7 @@ public class SimpleConnection {
 
     /**
      * 关闭连接
-     * @throws SQLException
+     * @throws SQLException 关闭连接异常
      */
     public void close() throws SQLException {
         if(null != connection){

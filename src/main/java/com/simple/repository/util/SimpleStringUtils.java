@@ -5,7 +5,7 @@ package com.simple.repository.util;
  *
  * @author laiqx
  * @version 1.0.1
- * @date 2022-11-14
+ * date 2022-11-14
  */
 public class SimpleStringUtils {
 
@@ -35,7 +35,7 @@ public class SimpleStringUtils {
      *
      * @param text             内容
      * @param initialUpperCase 是否首字母大写
-     * @return
+     * @return 返回驼峰的字符
      */
     public static String underlineToHump(String text, boolean initialUpperCase) {
         if (isEmpty(text)) {
@@ -90,6 +90,7 @@ public class SimpleStringUtils {
      * 下划线转驼峰
      *
      * @param text 内容
+     * @return 返回驼峰字符
      */
     public static String underlineToHump(String text) {
         return underlineToHump(text, true);
@@ -111,6 +112,7 @@ public class SimpleStringUtils {
      * 首字母大写
      *
      * @param text 字符串
+     * @return 返回首字母大写字符串
      */
     public static String initialUpperCase(String text) {
         if (isEmpty(text)) {
@@ -123,7 +125,7 @@ public class SimpleStringUtils {
     /**
      * 空判断
      *
-     * @param cs
+     * @param cs 字符
      * @return 返回是否为空
      */
     public static boolean isEmpty(final CharSequence cs) {

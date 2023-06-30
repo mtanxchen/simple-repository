@@ -12,7 +12,7 @@ import com.simple.repository.util.SimpleStringUtils;
  * </p>
  *
  * @author laiqx
- * @date 2023-01-16
+ * date 2023-01-16
  */
 public class SimpleRedisCacheManager<T extends Entity> implements SimpleCacheManager<T> {
 

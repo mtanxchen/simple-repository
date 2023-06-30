@@ -8,7 +8,7 @@ import java.util.Date;
  * 时间处理工具
  *
  * @author laiqx
- * @date 2022-12-07
+ * date 2022-12-07
  */
 public class SimpleDateUtils {
 
@@ -56,8 +56,8 @@ public class SimpleDateUtils {
 
     /**
      * 之前时间
-     *
-     * @param num  数值
+     * @param date 日期
+     * @param num 数值
      * @param type 时间类型
      * @return 返回当前时间num个type前的时间
      */
@@ -68,8 +68,8 @@ public class SimpleDateUtils {
 
     /**
      * 之后时间
-     *
-     * @param num  数值
+     * @param date 日期
+     * @param num 数值
      * @param type 时间类型
      * @return 返回当前时间num个type前的时间
      */
