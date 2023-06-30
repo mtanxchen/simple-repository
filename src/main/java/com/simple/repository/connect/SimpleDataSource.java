@@ -18,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * </p>
  *
  * @author laiqx
- * @date 2023-02-05
+ * date 2023-02-05
  */
 public class SimpleDataSource {
 
@@ -58,9 +58,10 @@ public class SimpleDataSource {
 
     /**
      * 加载数据源
-     *
      * @param dataSource 数据库连接配置
-     * @return 返回数据源
+     * @return 返回数据源对象
+     * @throws SQLException 数据库连接异常
+     * @throws ClassNotFoundException 类型转换异常
      */
     public static synchronized SimpleDataSource initSimpleDataSource(SimpleConfig.DataSource dataSource) throws SQLException, ClassNotFoundException {
         if (null == simpleDataSource) {
@@ -81,8 +82,8 @@ public class SimpleDataSource {
      * 2.如果连接已经超时则关闭连接后重新获取
      *
      * @return 返回数据库连接
-     * @throws SQLException
-     * @throws ClassNotFoundException
+     * @throws SQLException 数据连接异常
+     * @throws ClassNotFoundException 类型转换异常
      */
     public synchronized SimpleConnection activeConnect() throws SQLException, ClassNotFoundException {
         SimpleConnection connection = CONNECTION_POOL.remove(0);
@@ -100,8 +101,10 @@ public class SimpleDataSource {
     /**
      * 归还连接
      * <p>
-     * 判断是否超时，如果超时则关闭连接，否则放回连接池
+     *     判断是否超时，如果超时则关闭连接，否则放回连接池
      * </p>
+     * @param connection 数据库连接对象
+     * @throws SQLException 数据库异常
      */
     public void giveBack(SimpleConnection connection) throws SQLException {
         if (connection.overdue() || MAX_CONNECT_POOL_SIZE < CONNECTION_POOL.size()) {

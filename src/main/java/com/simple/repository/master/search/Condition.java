@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * 查询条件对象
  *
  * @author laiqx
- * @date 2023-04-23
+ * date 2023-04-23
  */
 public class Condition {
 
@@ -23,9 +23,9 @@ public class Condition {
 
     /**
      * 小于
-     *
      * @param fieldName 字段名称
-     * @param value     条件值
+     * @param value 条件值
+     * @return 返回当前对象
      */
     public Condition lt(String fieldName, Object value) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == value) {
@@ -42,6 +42,7 @@ public class Condition {
      *
      * @param fieldName 字段名称
      * @param value     条件值
+     * @return 返回当前对象
      */
     public Condition le(String fieldName, Object value) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == value) {
@@ -58,6 +59,7 @@ public class Condition {
      *
      * @param fieldName 字段名称
      * @param value     条件值
+     * @return 返回当前对象
      */
     public Condition gt(String fieldName, Object value) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == value) {
@@ -74,6 +76,7 @@ public class Condition {
      *
      * @param fieldName 字段名称
      * @param value     条件值
+     * @return 返回当前对象
      */
     public Condition ge(String fieldName, Object value) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == value) {
@@ -90,6 +93,7 @@ public class Condition {
      *
      * @param fieldName 字段名称
      * @param value     条件值
+     * @return 返回当前对象
      */
     public Condition eq(String fieldName, Object value) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == value) {
@@ -106,6 +110,7 @@ public class Condition {
      *
      * @param fieldName 字段名称
      * @param value     条件值
+     * @return 返回当前对象
      */
     public Condition ne(String fieldName, Object value) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == value) {
@@ -121,6 +126,7 @@ public class Condition {
      * 模糊匹配
      * @param fieldName 字段名
      * @param value 字段值
+     * @return 返回当前对象
      */
     public Condition like(String fieldName, Object value) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == value) {
@@ -136,6 +142,7 @@ public class Condition {
      * @param fieldName 字段名
      * @param values 字段值
      * @param <E> 值类型
+     * @return 返回当前对象
      */
     public <E extends Object> Condition in(String fieldName, List<E> values) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == values || values.isEmpty()) {
@@ -157,7 +164,7 @@ public class Condition {
      * 不包含
      * @param fieldName 字段名
      * @param values 字段值
-     * @return 不包含的sql段
+     * @return 返回当前条件对象
      * @param <T> 值类型
      */
     public <T> Condition notIn(String fieldName, List<T> values) {
@@ -179,6 +186,7 @@ public class Condition {
     /**
      * 是否为空
      * @param fieldName 字段名
+     * @return 返回当前条件对象
      */
     public Condition isNull(String fieldName) {
         if (SimpleStringUtils.isEmpty(fieldName)) {
@@ -193,6 +201,7 @@ public class Condition {
     /**
      * 是否非空
      * @param fieldName 字段名
+     * @return 返回当前条件对象
      */
     public Condition isNotNull(String fieldName) {
         if (SimpleStringUtils.isEmpty(fieldName)) {
@@ -205,7 +214,8 @@ public class Condition {
     }
 
     /**
-     * 与语句
+     * 与
+     * @return 返回当前条件对象
      */
     public Condition or() {
         whereSql += " or";
@@ -213,7 +223,8 @@ public class Condition {
     }
 
     /**
-     * 或条件
+     * 或
+     * @return 返回当前条件对象
      */
     public Condition and() {
         whereSql += " and";
@@ -224,7 +235,7 @@ public class Condition {
      * 括弧()
      *
      * @param condition 条件
-     * @return 返回新增括弧后的语句
+     * @return 返回新增括弧后的条件对象
      */
     public Condition paren(Condition condition) {
         if (SimpleStringUtils.isEmpty(condition.whereSql)) {
@@ -238,6 +249,7 @@ public class Condition {
     /**
      * 查询数据范围
      * @param size 查询数量
+     * @return 返回当前条件对象
      */
     public Condition limit(Integer size) {
         if (null == size) {
@@ -251,6 +263,7 @@ public class Condition {
      * 查询数据范围
      * @param startIndex 下标开始
      * @param endIndex 下标结束
+     * @return 返回当前条件对象
      */
     public Condition limit(Integer startIndex, Integer endIndex) {
         if (null == startIndex || null == endIndex) {
@@ -265,6 +278,7 @@ public class Condition {
      * @param fieldName 字段名
      * @param start 范围开始
      * @param end 范围结束
+     * @return 返回当前条件对象
      */
     public Condition between(String fieldName, Object start, Object end) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == start || null == end) {

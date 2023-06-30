@@ -26,7 +26,7 @@ import java.util.Map;
  * </p>
  *
  * @author laiqx
- * @date 2023-02-05
+ * date 2023-02-05
  */
 public class SimpleSession {
 
@@ -69,6 +69,7 @@ public class SimpleSession {
      * 开启事务
      * 如果当前连接未关闭自动提交，则重新获取
      * 注意：自动提交的连接默认为长链
+     * @throws SQLException 关闭自动提交事务异常
      */
     public void openTransaction() throws SQLException {
         connection.getConnection().setAutoCommit(false);
@@ -127,9 +128,9 @@ public class SimpleSession {
     }
 
     /**
-     * 修改或删除
-     *
-     * @param sql 删除语句
+     * 更新数据
+     * @param sql sql语句
+     * @return 返回变更数量
      */
     public int update(String sql) {
         try {
@@ -158,9 +159,9 @@ public class SimpleSession {
     }
 
     /**
-     * 新增
-     *
+     * 新增对象
      * @param sql sql语句
+     * @param tClass 新增对象的类型
      * @return 返回id集合
      */
     public List<Number> add(String sql, Class<?> tClass) {
@@ -187,9 +188,9 @@ public class SimpleSession {
         }
     }
 
-
     /**
      * 事务提交
+     * @throws SQLException 事务提交失败异常
      */
     public void commit() throws SQLException {
         connection.commit();
@@ -198,6 +199,7 @@ public class SimpleSession {
 
     /**
      * 事务回滚
+     * @throws SQLException 事务回滚失败异常
      */
     public void rollback() throws SQLException {
         connection.rollback();
@@ -205,6 +207,7 @@ public class SimpleSession {
 
     /**
      * 使用完连接(提交事务后)归还
+     * @throws SQLException 数据连接关闭异常
      */
     public void clear() throws SQLException {
         if (null != statement && !statement.isClosed()) {
@@ -223,7 +226,7 @@ public class SimpleSession {
             if (SimpleConfig.initConfig().log) {
                 log.info(sql);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new SimpleException(e);
         }
     }
@@ -231,7 +234,7 @@ public class SimpleSession {
     /**
      * 关闭ResultSet
      *
-     * @param result
+     * @param result ResultSet
      */
     private void closeResultSet(ResultSet result) {
         if (null != result) {

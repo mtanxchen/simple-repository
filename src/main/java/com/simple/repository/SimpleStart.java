@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * simple启动服务
  * @author laiqx
- * @date 2023-02-23
+ * date 2023-02-23
  */
 public class SimpleStart {
 
@@ -18,7 +18,8 @@ public class SimpleStart {
      * <p>
      *     使用simple-repository时需要调用
      * </p>
-     * @throws IOException
+     * @param args 运行参数
+     * @throws IOException 文件读取异常
      */
     public static void run(String [] args) throws IOException {
         SimpleConfig.setRunEnv(args);

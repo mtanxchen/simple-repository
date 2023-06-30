@@ -27,13 +27,15 @@ public class SimpleGenerate {
 
     /**
      * 运行代码生成器
+     * @throws IOException 代码生成器异常
      */
     public void run() throws IOException {
         analysisModel();
     }
 
     /**
-     * 创建model
+     * 分析数据表模型
+     * @throws IOException 读取文件异常
      */
     public void analysisModel() throws IOException {
         for (ModelInfo info : config.ModelInfos) {
@@ -48,10 +50,11 @@ public class SimpleGenerate {
 
     /**
      * 创建数据模型文件
-     *
-     * @param path        路径
+     * @param path 文件路径
      * @param packageName 包名
-     * @param table       表名
+     * @param schema 数据库前缀
+     * @param table 表名
+     * @throws IOException 文件创建异常
      */
     public void createModelFile(String path, String packageName, String schema, String table) throws IOException {
         String sql = String.format("select column_name,data_type,column_comment from information_schema.columns where table_schema='%s' and  table_name = '%s'", schema, table);
@@ -78,12 +81,13 @@ public class SimpleGenerate {
     }
 
     /**
-     * 创建entity
-     *
-     * @param path        路径
+     * 创建entity文件
+     * @param path 路径
      * @param packageName 包名
-     * @param className   类名
-     * @param fields      字段列表
+     * @param table 表名
+     * @param className 类名
+     * @param fields 字段集合
+     * @throws IOException 文件创建失败异常
      */
     private void createEntity(String path, String packageName,String table, String className, List<TableField> fields) throws IOException {
         String idType = "Long";
@@ -135,10 +139,10 @@ public class SimpleGenerate {
      * <p>
      * 判断spring配置是否开启，开启则使用Repository注解
      * </p>
-     *
-     * @param entityPath        entity对象路径
-     * @param entityPackageName entity包名
-     * @param className         类名
+     * @param entityPath 路径
+     * @param entityPackageName 包名
+     * @param className 类名
+     * @throws IOException 文件创建异常
      */
     public void createRepository(String entityPath, String entityPackageName, String className) throws IOException {
         // 生成类的java字符串

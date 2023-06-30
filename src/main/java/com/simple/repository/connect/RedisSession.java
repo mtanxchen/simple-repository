@@ -16,7 +16,7 @@ import java.util.Set;
  * redis会话
  *
  * @author laiqx
- * @date 2023-02-25
+ * date 2023-02-25
  */
 public class RedisSession {
 
@@ -44,6 +44,7 @@ public class RedisSession {
      *
      * @param jedis redis操作对象
      * @param key   索引
+     * @param sec 过期秒数
      */
     public static void checkExpire(Jedis jedis, String key, long sec) {
         if (0 > jedis.ttl(key)) {
@@ -195,11 +196,7 @@ public class RedisSession {
         public final Long EXPIRES = 2 * SimpleDateUtils.HOUR_MSEL;
 
         public SimpleJedisPool() {
-            try {
-                this.jedisPool = new JedisPool(SimpleConfig.initConfig().redis.getHost(), SimpleConfig.initConfig().redis.getPort(), null, SimpleConfig.initConfig().redis.getPassword());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            this.jedisPool = new JedisPool(SimpleConfig.initConfig().redis.getHost(), SimpleConfig.initConfig().redis.getPort(), null, SimpleConfig.initConfig().redis.getPassword());
             this.time = System.currentTimeMillis();
         }
 

@@ -9,14 +9,14 @@ import java.io.IOException;
 /**
  * 代码启动生成
  * @author laiqx
- * @date 2023-03-01
+ * date 2023-03-01
  */
 public class GenerateStart {
 
     /**
-     * 代码生成入库
-     * @param args
-     * @throws IOException
+     * 代码生成入口
+     * @param args 参数
+     * @throws IOException 代码生成异常，例如读取文件失败等
      */
     public static void main(String[] args) throws IOException{
         SimpleConfig.setRunEnv(args);

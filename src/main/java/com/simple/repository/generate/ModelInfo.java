@@ -9,7 +9,7 @@ import java.util.List;
  * </p>
  *
  * @author laiqx
- * @date 2023-02-08
+ * date 2023-02-08
  */
 public class ModelInfo {
 

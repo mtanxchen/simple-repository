@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * </p>
  *
  * @author laiqx
- * @date 2023-01-16
+ * date 2023-01-16
  */
 public class SimpleInnerCacheManager<T extends Entity> implements SimpleCacheManager<T> {
     public Map<Number, T> cacheManager = new ConcurrentHashMap<>();

@@ -4,7 +4,7 @@ package com.simple.repository.generate;
  * 表字段
  *
  * @author laiqx
- * @date 2023-02-08
+ * date 2023-02-08
  */
 public class TableField {
 

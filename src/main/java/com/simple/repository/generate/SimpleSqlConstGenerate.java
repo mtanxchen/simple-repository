@@ -15,7 +15,7 @@ import java.util.Map;
  * sql常量生成
  *
  * @author laiqx
- * @date 2023-04-23
+ * date 2023-04-23
  */
 
 public class SimpleSqlConstGenerate {

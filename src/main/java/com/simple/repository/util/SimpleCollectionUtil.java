@@ -17,7 +17,7 @@ public class SimpleCollectionUtil {
      * @param keyClass  key类型
      * @param <K>       返回map中key的类型
      * @param <V>       返回map中value的类型
-     * @return
+     * @return 返回map对象
      */
     public static <K, V> Map<K, V> listToMap(List<V> list, String fieldName, Class<K> keyClass) {
         if (null == list || list.isEmpty() || SimpleStringUtils.isEmpty(fieldName) || null == keyClass) {
@@ -44,15 +44,15 @@ public class SimpleCollectionUtil {
 
     /**
      * list 指定参数转 map
-     *
-     * @param list     列表
-     * @param keyName  字段名
+     * @param list 对象集
+     * @param keyName 字段名
      * @param keyClass key类型
-     * @param valName  值名称
-     * @param valClass value 类型
-     * @param <K>      返回map中key的类型
-     * @param <V>      返回map中value的类型
-     * @return 返回map
+     * @param valName 值名称
+     * @param valClass 值类型
+     * @return 返回转换后的map
+     * @param <K> 字段名类型
+     * @param <V> 字段值类型
+     * @param <E> 来源类类型
      */
     public static <K, V, E> Map<K, V> listToParamMap(List<E> list, String keyName, Class<K> keyClass, String valName, Class<V> valClass) {
         if (null == list || list.isEmpty() || SimpleStringUtils.isEmpty(keyName) || null == keyClass
@@ -126,7 +126,7 @@ public class SimpleCollectionUtil {
      * @param paramClass 参数类型
      * @param <P>        参数类型
      * @param <T>        对象类型
-     * @return
+     * @return 返回转换后的set
      */
     public static <P, T> Set<P> listParamToSet(List<T> list, String paramName, Class<P> paramClass) {
         if (null == list || list.isEmpty() || SimpleStringUtils.isEmpty(paramName) || null == paramClass) {
@@ -196,9 +196,9 @@ public class SimpleCollectionUtil {
      *
      * @param map    map
      * @param isDesc 是否倒序
-     * @param <K>
-     * @param <V>
-     * @return
+     * @param <K> key类型
+     * @param <V> value类型
+     * @return 返回排序后的map
      */
     public static <K, V> Map<K, V> mapSort(Map<K, V> map, boolean isDesc) {
         if (null == map || map.isEmpty()) {

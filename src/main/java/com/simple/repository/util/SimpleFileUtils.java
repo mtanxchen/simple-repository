@@ -8,7 +8,7 @@ import java.io.IOException;
  * 文件处理工具
  *
  * @author laiqx
- * @date 2023-02-11
+ * date 2023-02-11
  */
 public class SimpleFileUtils {
 
@@ -26,9 +26,9 @@ public class SimpleFileUtils {
 
     /**
      * 创建文件
-     *
-     * @param path    目录
+     * @param path 目录
      * @param content 文档
+     * @throws IOException 创建文件异常
      */
     public static void createFile(String path, String content) throws IOException {
         File file = new File(path);
@@ -43,16 +43,17 @@ public class SimpleFileUtils {
     /**
      * 判断是否已存在
      * @param path 文件路径
+     * @return 返回是否存在文件
      */
     public static boolean exists(String path) {
         return new File(path).exists();
     }
 
-
-
     /**
      * 相对转绝对目录
-     * @return
+     * @param path 相对路径
+     * @return 返回绝对目录
+     * @throws IOException 文件转换异常
      */
     public static String relativeToAbsolutePath(String path) throws IOException {
         File directory = new File(path);
