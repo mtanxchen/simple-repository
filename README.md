@@ -3,6 +3,12 @@ Simple-Repository是一款简易的数据存储管理框架，提供便捷的缓
 
 #### <a href="http://gpl.edlian.com/book/master/index.html" target="_blank" >点击跳转Simple-Repository文档</a>
 
+# 版本更新
+### Version_1.1.0
+#### 1.Entity生成新增TABLE常量标识来源表名
+#### 2.Condition生成Sort容器,用于Condition查询排序
+#### 3.SimpleCollectionUtil新增listValueGroupMap与listGroupMap方法，分别用于将list转为分组MAP(Map<K,List<V>>)
+
 # 为什么要设计Simple-Repository
 ### 1. SQL从业务代码中完全解耦
 日常工作中使用过Spring JPA、Hibernate、Mybatis、JOOQ等主流的ORM框架。但这些框架要么过于厚重配置繁琐，要么会将sql语句交织在业务代码中，
