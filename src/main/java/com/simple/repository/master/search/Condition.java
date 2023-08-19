@@ -3,6 +3,7 @@ package com.simple.repository.master.search;
 import com.simple.repository.util.SimpleDateUtils;
 import com.simple.repository.util.SimpleStringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,10 +22,46 @@ public class Condition {
         return whereSql;
     }
 
+
+    /**
+     * 排序
+     */
+    private static final List<Sort> sorts = new ArrayList<>();
+
+    /**
+     * 新增排序规则
+     *
+     * @param fieldName 字段
+     * @param type      排序类型
+     * @return 返回当前查询对象
+     */
+    public Condition putSort(String fieldName, Sort.SortType type) {
+        sorts.add(new Sort(fieldName, type));
+        return this;
+    }
+
+
+    /**
+     * 获取排序
+     *
+     * @return 查询条件
+     */
+    public String getSort() {
+        if (sorts.isEmpty()) {
+            return "";
+        }
+        StringBuilder sortStr = new StringBuilder(" order by ");
+        for (Sort sort : sorts) {
+            sortStr.append(sort.getFieldName()).append(" ").append(sort.getType()).append(",");
+        }
+        return sortStr.substring(0, sortStr.length() - 1);
+    }
+
     /**
      * 小于
+     *
      * @param fieldName 字段名称
-     * @param value 条件值
+     * @param value     条件值
      * @return 返回当前对象
      */
     public Condition lt(String fieldName, Object value) {
@@ -124,8 +161,9 @@ public class Condition {
 
     /**
      * 模糊匹配
+     *
      * @param fieldName 字段名
-     * @param value 字段值
+     * @param value     字段值
      * @return 返回当前对象
      */
     public Condition like(String fieldName, Object value) {
@@ -133,18 +171,19 @@ public class Condition {
             whereSql += " 1 = 1";
             return this;
         }
-        whereSql += " " + fieldName + " like \'%" + value + "%\'";
+        whereSql += " " + fieldName + " like '%" + value + "%'";
         return this;
     }
 
     /**
      * 包含条件
+     *
      * @param fieldName 字段名
-     * @param values 字段值
-     * @param <E> 值类型
+     * @param values    字段值
+     * @param <E>       值类型
      * @return 返回当前对象
      */
-    public <E extends Object> Condition in(String fieldName, List<E> values) {
+    public <E> Condition in(String fieldName, List<E> values) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == values || values.isEmpty()) {
             whereSql += " 1 = 1";
             return this;
@@ -162,10 +201,11 @@ public class Condition {
 
     /**
      * 不包含
+     *
      * @param fieldName 字段名
-     * @param values 字段值
+     * @param values    字段值
+     * @param <T>       值类型
      * @return 返回当前条件对象
-     * @param <T> 值类型
      */
     public <T> Condition notIn(String fieldName, List<T> values) {
         if (SimpleStringUtils.isEmpty(fieldName) || null == values || values.isEmpty()) {
@@ -173,7 +213,7 @@ public class Condition {
             return this;
         }
         String sql = " %s not in(%s)";
-        String str = "";
+        String str;
         if (values.get(0).getClass().equals(String.class) || values.get(0).getClass().equals(Date.class)) {
             str = values.stream().map(o -> "'" + o.toString() + "'").collect(Collectors.joining(","));
         } else {
@@ -185,6 +225,7 @@ public class Condition {
 
     /**
      * 是否为空
+     *
      * @param fieldName 字段名
      * @return 返回当前条件对象
      */
@@ -200,6 +241,7 @@ public class Condition {
 
     /**
      * 是否非空
+     *
      * @param fieldName 字段名
      * @return 返回当前条件对象
      */
@@ -215,6 +257,7 @@ public class Condition {
 
     /**
      * 与
+     *
      * @return 返回当前条件对象
      */
     public Condition or() {
@@ -224,6 +267,7 @@ public class Condition {
 
     /**
      * 或
+     *
      * @return 返回当前条件对象
      */
     public Condition and() {
@@ -248,6 +292,7 @@ public class Condition {
 
     /**
      * 查询数据范围
+     *
      * @param size 查询数量
      * @return 返回当前条件对象
      */
@@ -261,8 +306,9 @@ public class Condition {
 
     /**
      * 查询数据范围
+     *
      * @param startIndex 下标开始
-     * @param endIndex 下标结束
+     * @param endIndex   下标结束
      * @return 返回当前条件对象
      */
     public Condition limit(Integer startIndex, Integer endIndex) {
@@ -275,9 +321,10 @@ public class Condition {
 
     /**
      * 范围条件查询
+     *
      * @param fieldName 字段名
-     * @param start 范围开始
-     * @param end 范围结束
+     * @param start     范围开始
+     * @param end       范围结束
      * @return 返回当前条件对象
      */
     public Condition between(String fieldName, Object start, Object end) {
@@ -311,7 +358,7 @@ public class Condition {
             return value;
         }
         if (value instanceof String) {
-            value = SimpleStringUtils.replaceAll(value.toString(),"'","\\'");
+            value = SimpleStringUtils.replaceAll(value.toString(), "'", "\\'");
             return "'" + value + "'";
         } else if (value instanceof Date) {
             return "'" + SimpleDateUtils.dateToStr((Date) value, SimpleDateUtils.FormatType.DATE_FORMAT) + "'";

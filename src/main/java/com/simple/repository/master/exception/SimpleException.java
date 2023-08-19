@@ -28,14 +28,16 @@ public class SimpleException extends RuntimeException {
         ENTITY_ID_IS_NULL("操作对象和ID不能为空!"),
         ENTITY_IS_NULL("操作对象不能为空!"),
         ENTITY_CONDITION_IS_NULL("操作对象和条件不能为空"),
-        SQL_IS_NULL("查询语句为空请检查sqlIndex")
+        SQL_IS_NULL("查询语句为空请检查sqlIndex"),
+
+        DEL_WHERE_IS_NULL("删除语句条件不能为空")
         ;
 
         Type(String msg) {
             this.msg = msg;
         }
 
-        private String msg;
+        private final String msg;
 
         public String getMsg() {
             return msg;

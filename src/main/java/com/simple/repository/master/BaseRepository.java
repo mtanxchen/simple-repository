@@ -11,7 +11,6 @@ import com.simple.repository.master.search.BaseSearch;
 import com.simple.repository.master.search.Condition;
 import com.simple.repository.util.*;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -210,6 +209,7 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         /* 删除数据 */
         String sql = "delete from %s where %s;";
         sql = String.format(sql, getTableName(), getWhereSql(condition));
+        checkDelSql(sql);
         SimpleSession.openSession().update(sql);
         delAllCache();
     }
@@ -233,8 +233,8 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
     public T get(Condition condition) {
         String table = getTableName();
         String where = getWhereSql(condition);
-        String sql = "select * from %s where %s;";
-        sql = String.format(sql, table, where);
+        String sql = "select * from %s where %s %s;";
+        sql = String.format(sql, table, where, condition.getSort());
         List<Map<String, Object>> list = SimpleSession.openSession().query(sql);
         List<T> results = SimpleCollectionUtil.listMapToObject(list, entityClass);
         return results.isEmpty() ? null : results.get(0);
@@ -286,8 +286,8 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
         }
         String table = getTableName();
         String where = getWhereSql(condition);
-        String sql = "select * from %s where %s;";
-        sql = String.format(sql, table, where);
+        String sql = "select * from %s where %s %s;";
+        sql = String.format(sql, table, where, condition.getSort());
         List<Map<String, Object>> list = SimpleSession.openSession().query(sql);
         return SimpleCollectionUtil.listMapToObject(list, entityClass);
     }
@@ -944,5 +944,26 @@ public class BaseRepository<T extends Entity> implements IBaseRepository<T> {
             return condition.getWhereSql();
         }
         return " 1 = 1 ";
+    }
+
+
+    /**
+     * 检测删除语句
+     */
+    private void checkDelSql(String sql) {
+        if (!sql.contains(" where ")) {
+            throw new SimpleException(SimpleException.Type.DEL_WHERE_IS_NULL);
+        }
+        String checkText = sql.substring(sql.indexOf(" where "));
+        checkText = checkText.replaceAll("where", "")
+                .replaceAll(" and ", "")
+                .replaceAll(" or ", "")
+                .replaceAll(" \\( ", "")
+                .replaceAll(" \\) ", "")
+                .replaceAll(" 1 = 1 ", "")
+                .replaceAll(" ", "");
+        if (checkText.length() < 5) {
+            throw new SimpleException(SimpleException.Type.DEL_WHERE_IS_NULL);
+        }
     }
 }

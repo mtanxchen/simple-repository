@@ -2,10 +2,13 @@ package com.simple.repository.generate;
 
 
 import com.simple.repository.config.SimpleConfig;
+import com.simple.repository.connect.SimpleDataSource;
 import com.simple.repository.connect.SimpleSession;
 import com.simple.repository.util.SimpleFileUtils;
 import com.simple.repository.util.SimpleSqlDataType;
 import com.simple.repository.util.SimpleStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,18 +18,21 @@ import java.util.*;
  */
 public class SimpleGenerate {
 
+    private final static Logger log = LoggerFactory.getLogger(SimpleGenerate.class);
+
     private static SimpleConfig config;
     private static SimpleSession simpleSession;
-    private static final List<String> notCreateField = Arrays.asList("id");
+    private static final List<String> notCreateField = Collections.singletonList("id");
 
 
-    public SimpleGenerate() throws IOException{
+    public SimpleGenerate() {
         config = SimpleConfig.initConfig();
         simpleSession = SimpleSession.openSession();
     }
 
     /**
      * 运行代码生成器
+     *
      * @throws IOException 代码生成器异常
      */
     public void run() throws IOException {
@@ -35,6 +41,7 @@ public class SimpleGenerate {
 
     /**
      * 分析数据表模型
+     *
      * @throws IOException 读取文件异常
      */
     public void analysisModel() throws IOException {
@@ -50,19 +57,20 @@ public class SimpleGenerate {
 
     /**
      * 创建数据模型文件
-     * @param path 文件路径
+     *
+     * @param path        文件路径
      * @param packageName 包名
-     * @param schema 数据库前缀
-     * @param table 表名
+     * @param schema      数据库前缀
+     * @param table       表名
      * @throws IOException 文件创建异常
      */
     public void createModelFile(String path, String packageName, String schema, String table) throws IOException {
         String sql = String.format("select column_name,data_type,column_comment from information_schema.columns where table_schema='%s' and  table_name = '%s'", schema, table);
-        List<Map<String, Object>> list = new ArrayList<>();
+        List<Map<String, Object>> list;
         try {
             list = simpleSession.query(sql);
         } catch (Exception e) {
-            System.out.println("repository生成器:生成表对应数据失败，table=" + table + "原因=" + e.getMessage());
+            log.error("repository生成器:生成表对应数据失败，table={},原因={}", table, e.getMessage());
             return;
         }
         List<TableField> fields = new ArrayList<>();
@@ -82,14 +90,15 @@ public class SimpleGenerate {
 
     /**
      * 创建entity文件
-     * @param path 路径
+     *
+     * @param path        路径
      * @param packageName 包名
-     * @param table 表名
-     * @param className 类名
-     * @param fields 字段集合
+     * @param table       表名
+     * @param className   类名
+     * @param fields      字段集合
      * @throws IOException 文件创建失败异常
      */
-    private void createEntity(String path, String packageName,String table, String className, List<TableField> fields) throws IOException {
+    private void createEntity(String path, String packageName, String table, String className, List<TableField> fields) throws IOException {
         String idType = "Long";
         List<String> typeList = new ArrayList<>();
         for (TableField field : fields) {
@@ -111,10 +120,10 @@ public class SimpleGenerate {
                 "}";
         String params = createParams(fields);
         String getAndSet = "";
-        String fieldConst = createFieldConst(fields);
+        String fieldConst = createFieldConst(table,fields);
         // 如果设置为私有属性则创建private访问符字段并加上get和set
-        if(config.privateProperty){
-            params = params.replaceAll("public","private");
+        if (config.privateProperty) {
+            params = params.replaceAll("public", "private");
             getAndSet = createGetAndSet(fields);
         }
         // 替换生成的字符
@@ -130,7 +139,7 @@ public class SimpleGenerate {
         String str = "import com.simple.repository.master.Entity;\n";
         str += types.contains("Date") ? "import java.util.Date;\n" : "";
         str += types.contains("BigDecimal") ? "import java.math.BigDecimal;\n" : "";
-        str += types.contains("Timestamp") ? "import java.sql.Timestamp;;\n" : "";
+        str += types.contains("Timestamp") ? "import java.sql.Timestamp;\n" : "";
         return str + "\n";
     }
 
@@ -139,9 +148,10 @@ public class SimpleGenerate {
      * <p>
      * 判断spring配置是否开启，开启则使用Repository注解
      * </p>
-     * @param entityPath 路径
+     *
+     * @param entityPath        路径
      * @param entityPackageName 包名
-     * @param className 类名
+     * @param className         类名
      * @throws IOException 文件创建异常
      */
     public void createRepository(String entityPath, String entityPackageName, String className) throws IOException {
@@ -221,7 +231,7 @@ public class SimpleGenerate {
      * @param fields 字段常量
      * @return 返回字段常量
      */
-    public String createFieldConst(List<TableField> fields) {
+    public String createFieldConst(String table,List<TableField> fields) {
         StringBuilder text = new StringBuilder();
         for (TableField field : fields) {
             if (notCreateField.contains(field.fieldName)) {
@@ -232,6 +242,10 @@ public class SimpleGenerate {
             param = param.replaceAll("@value", field.fieldName);
             text.append(param);
         }
+        // 新加表名
+        String param = "    public static final String TABLE = \"@value\";\n\n";
+        param = param.replaceAll("@value", table);
+        text.append(param);
         return text.toString();
     }
 

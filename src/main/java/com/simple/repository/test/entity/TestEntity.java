@@ -1,29 +1,34 @@
 package com.simple.repository.test.entity;
 
 import com.simple.repository.master.Entity;
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class TestEntity extends Entity<Integer> {
 
     /**
-     * 名称
+     * 
      */
     public String name;
 
     /**
-     * 年龄
+     * 
      */
     public Integer age;
 
     /**
-     * 创建时间
+     * 
      */
-    public Date createTime;
+    public Timestamp createTime;
 
     /**
-     * 修改时间
+     * 
      */
-    public Date updateTime;
+    public Timestamp updateTime;
+
+    public Class<?> getIdentityClass(){
+        return Integer.class;
+    }
+
 
     public static final String NAME = "name";
 
@@ -33,8 +38,6 @@ public class TestEntity extends Entity<Integer> {
 
     public static final String UPDATE_TIME = "update_time";
 
-    public Class<?> getIdentityClass(){
-        return Integer.class;
-    }
+    public static final String TABLE = "test";
 
 }

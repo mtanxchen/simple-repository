@@ -31,10 +31,10 @@ public class SimpleCollectionUtil {
         Map<K, V> map = new HashMap<>();
         for (V obj : list) {
             try {
-                if(null == field.get(obj)){
+                if (null == field.get(obj)) {
                     continue;
                 }
-                map.put((K) field.get(obj), obj);
+                map.put(keyClass.cast(field.get(obj)), obj);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -44,15 +44,16 @@ public class SimpleCollectionUtil {
 
     /**
      * list 指定参数转 map
-     * @param list 对象集
-     * @param keyName 字段名
+     *
+     * @param list     对象集
+     * @param keyName  字段名
      * @param keyClass key类型
-     * @param valName 值名称
+     * @param valName  值名称
      * @param valClass 值类型
+     * @param <K>      字段名类型
+     * @param <V>      字段值类型
+     * @param <E>      来源类类型
      * @return 返回转换后的map
-     * @param <K> 字段名类型
-     * @param <V> 字段值类型
-     * @param <E> 来源类类型
      */
     public static <K, V, E> Map<K, V> listToParamMap(List<E> list, String keyName, Class<K> keyClass, String valName, Class<V> valClass) {
         if (null == list || list.isEmpty() || SimpleStringUtils.isEmpty(keyName) || null == keyClass
@@ -75,7 +76,7 @@ public class SimpleCollectionUtil {
                 if (null == keyField.get(obj)) {
                     continue;
                 }
-                map.put((K) keyField.get(obj), (V) valField.get(obj));
+                map.put(keyClass.cast(keyField.get(obj)), valClass.cast(valField.get(obj)));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -110,7 +111,7 @@ public class SimpleCollectionUtil {
                 if (null == field.get(obj)) {
                     continue;
                 }
-                newList.add((P) field.get(obj));
+                newList.add(paramClass.cast(field.get(obj)));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
@@ -140,7 +141,7 @@ public class SimpleCollectionUtil {
                 if (null == field.get(obj)) {
                     continue;
                 }
-                set.add((P) field.get(obj));
+                set.add(paramClass.cast(field.get(obj)));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -196,8 +197,8 @@ public class SimpleCollectionUtil {
      *
      * @param map    map
      * @param isDesc 是否倒序
-     * @param <K> key类型
-     * @param <V> value类型
+     * @param <K>    key类型
+     * @param <V>    value类型
      * @return 返回排序后的map
      */
     public static <K, V> Map<K, V> mapSort(Map<K, V> map, boolean isDesc) {
@@ -205,25 +206,98 @@ public class SimpleCollectionUtil {
             return map;
         }
         Map<K, V> newMap = new LinkedHashMap<>();
-        Comparator<K> comparator = new Comparator<K>() {
-            @Override
-            public int compare(Object o1, Object o2) {
-                if (null == o1 || null == o2) {
-                    return 0;
-                }
-                int i = isDesc ? o2.toString().compareTo(o1.toString()) : o1.toString().compareTo(o2.toString());
-                if (i > 0) {
-                    return 1;
-                } else if (i < 0) {
-                    return -1;
-                }
+        Comparator<K> comparator = (o1, o2) -> {
+            if (null == o1 || null == o2) {
                 return 0;
             }
+            int i = isDesc ? o2.toString().compareTo(o1.toString()) : o1.toString().compareTo(o2.toString());
+            if (i > 0) {
+                return 1;
+            } else if (i < 0) {
+                return -1;
+            }
+            return 0;
         };
-        map.keySet().stream().sorted(comparator).forEach(o -> {
-            newMap.put(o, map.get(o));
-        });
+        map.keySet().stream().sorted(comparator).forEach(o -> newMap.put(o, map.get(o)));
         return newMap;
+    }
+
+    /**
+     * list 根据属性值分组
+     *
+     * @param list     容器
+     * @param keyName  属性名
+     * @param keyClass 属性类型
+     * @param <K>      属性类型
+     * @param <V>      对象类型
+     * @return 返回分组后map
+     */
+    public static <K, V> Map<K, List<V>> listGroupMap(List<V> list, String keyName, Class<K> keyClass) {
+        if (null != list && !list.isEmpty() && !SimpleStringUtils.isEmpty(keyName) && null != keyClass) {
+            keyName = SimpleStringUtils.underlineToHump(keyName, false);
+            Map<String, Field> fieldMap = SimpleBeanUtils.getFields(list.get(0));
+            Field keyField = fieldMap.get(keyName);
+            if (null != keyField) {
+                Map<K, List<V>> map = new HashMap<>();
+                for (V obj : list) {
+                    try {
+                        K key = keyClass.cast(keyField.get(obj));
+                        List<V> values = null == map.get(key) ? new ArrayList<>() : map.get(key);
+                        values.add(obj);
+                        map.put(key, values);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return map;
+            } else {
+                throw new RuntimeException("field not found:" + keyName);
+            }
+        } else {
+            return new HashMap<>();
+        }
+    }
+
+    /**
+     * list 根据属性值分组
+     *
+     * @param list     容器
+     * @param keyName  属性名
+     * @param keyClass 属性类型
+     * @param valName  属性值名
+     * @param valClass 属性值类型
+     * @param <K>      对象类型
+     * @param <V>      key类型
+     * @param <E>      value类型
+     * @return 返回根据根据属性值分组的参数
+     */
+    public static <K, V, E> Map<K, List<V>> listValueGroupMap(List<E> list, String keyName, Class<K> keyClass, String valName, Class<V> valClass) {
+        if (null != list && !list.isEmpty() && !SimpleStringUtils.isEmpty(keyName) && null != keyClass && null != valName && null != valClass) {
+            keyName = SimpleStringUtils.underlineToHump(keyName, false);
+            valName = SimpleStringUtils.underlineToHump(valName, false);
+            Map<String, Field> fieldMap = SimpleBeanUtils.getFields(list.get(0));
+            Field keyField = fieldMap.get(keyName);
+            Field valField = fieldMap.get(valName);
+            if (null != keyField && null != valField) {
+                Map<K, List<V>> map = new HashMap<>();
+                for (E obj : list) {
+                    try {
+                        K key = keyClass.cast(keyField.get(obj));
+                        V value = valClass.cast(valField.get(obj));
+                        List<V> values = null == map.get(key) ? new ArrayList<>() : map.get(key);
+                        values.add(value);
+                        map.put(key, values);
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return map;
+            } else {
+                throw new RuntimeException("field not found:" + keyName + "|" + valName);
+            }
+        } else {
+            return new HashMap<>();
+        }
     }
 
 }

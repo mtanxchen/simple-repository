@@ -10,13 +10,13 @@ simple:
     datasource:
       url: jdbc:mysql://localhost:3306/simple?useUnicode=true&characterEncoding=utf8&useSSL=true
       username: root
-      password: youthyo.com
+      password: 123456
       driver: com.mysql.cj.jdbc.Driver
-    redis:  # redis配置
+    redis: # redis配置
       enable: false  #是否开启redis缓存
-      host: 192.168.10.111
-      port: 9379
-      password: redis4123
+      host: 192.168.10.183
+      port: 6379
+      password: edlian
   test:   #测试环境
     log: true #是否输出日志
     datasource:
