@@ -76,7 +76,7 @@ public class SimpleBeanUtils {
      */
     public static <E> List<E> copyListObject(List<?> sources, Class<E> tClass) {
         if (null == sources || null == tClass || sources.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         /* 获取来源对象的值 */
         List<E> result = new ArrayList<>();
