@@ -26,7 +26,7 @@ public class Condition {
     /**
      * 排序
      */
-    private static final List<Sort> sorts = new ArrayList<>();
+    private final List<Sort> sorts = new ArrayList<>();
 
     /**
      * 新增排序规则
