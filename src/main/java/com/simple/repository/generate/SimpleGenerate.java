@@ -65,7 +65,7 @@ public class SimpleGenerate {
      * @throws IOException 文件创建异常
      */
     public void createModelFile(String path, String packageName, String schema, String table) throws IOException {
-        String sql = String.format("select column_name,data_type,column_comment from information_schema.columns where table_schema='%s' and  table_name = '%s'", schema, table);
+        String sql = String.format("select column_name,data_type,column_comment from information_schema.columns where table_schema='%s' and  table_name = '%s' order by ordinal_position", schema, table);
         List<Map<String, Object>> list;
         try {
             list = simpleSession.query(sql);
