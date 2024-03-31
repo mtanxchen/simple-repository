@@ -1,0 +1,68 @@
+#
+# entity 生成配置文件
+# package 存放文件的包名
+# tables 需要生成表数据
+#
+simple:
+  env: dev
+  dev: #开发环境
+    log: true #是否输出日志
+    datasource:
+      url: jdbc:mysql://localhost:3306/simple?useUnicode=true&characterEncoding=utf8&useSSL=true
+      username: root
+      password: 123456
+      driver: com.mysql.cj.jdbc.Driver
+    redis: # redis配置
+      enable: false  #是否开启redis缓存
+      host: 192.168.10.183
+      port: 6379
+      password: edlian
+  test:   #测试环境
+    log: true #是否输出日志
+    datasource:
+      url: jdbc:mysql://localhost:3306/simple?useUnicode=true&characterEncoding=utf8&useSSL=true
+      username: root_test
+      password: youthyo.com
+      driver: com.mysql.cj.jdbc.Driver
+    redis: # redis配置
+      enable: true  #是否开启redis缓存
+      host: 192.168.10.111
+      port: 9379
+      password: redis4123
+  pre:  #预发环境
+    log: false #是否输出日志
+    datasource:
+      url: jdbc:mysql://localhost:3306/simple?useUnicode=true&characterEncoding=utf8&useSSL=true
+      username: root_pre
+      password: youthyo.com
+      driver: com.mysql.cj.jdbc.Driver
+    redis: # redis配置
+      enable: true  #是否开启redis缓存
+      host: 192.168.10.111
+      port: 9379
+      password: redis4123
+  pro:  #生产环境
+    log: false #是否输出日志
+    datasource:
+      url: jdbc:mysql://localhost:3306/simple?useUnicode=true&characterEncoding=utf8&useSSL=true
+      username: root_pro
+      password: youthyo.com
+      driver: com.mysql.cj.jdbc.Driver
+    redis: # redis配置
+      enable: true  #是否开启redis缓存
+      host: 192.168.10.111
+      port: 9379
+      password: redis4123
+  cache-table: edl_user|edl_test|edl_goods # 需要缓存的表对象
+  sql-index-package: com.simple.repository.test.index
+  generate: # 代码生成配置
+    spring: false  # 是否开启spring
+    private-property: false # 私有属性：默认为false,false生成public属性，true为private属性
+    goods:
+      schema: simple
+      package: com.simple.repository.test.entity
+      tables: test
+    user:
+      schema: simple
+      package: com.simple.repository.test.userEntity
+      tables: user
